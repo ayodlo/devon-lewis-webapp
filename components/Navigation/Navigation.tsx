@@ -1,5 +1,8 @@
-import Link from "next/link";
+"use client";
 
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -7,81 +10,69 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
+const navLinks = [
+  { href: "/projects", label: "Projects" },
+  { href: "/producer-battles", label: "Producer Battles" },
+  { href: "/music", label: "Music" },
+  { href: "/contact", label: "Contact" },
+];
+
 export default function Navigation() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="w-full py-16">
+    <header className="w-full px-8 py-8 lg:py-16">
       <nav className="flex w-full items-center justify-between">
+        {/* Logo */}
         <Link
           href="/"
-          className="
-        text-4xl
-        font-semibold
-        tracking-tight
-        text-secondary
-        transition-opacity
-        hover:opacity-80
-      "
+          className="text-3xl font-semibold tracking-tight transition-opacity hover:opacity-80 lg:text-4xl"
         >
-          Devon <span className="text-primary">Lewis</span>
+          <span className="text-secondary-foreground">Devon</span>{" "}
+          <span className="text-primary">Lewis</span>
         </Link>
 
-        <NavigationMenu className="w-auto">
-          <NavigationMenuList
-            className="
-          gap-10
-          text-base
-          font-medium
-          tracking-tight
-          text-secondary
-        "
-          >
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/projects"
-                className="rounded-full px-6 py-4"
-              >
-                Projects
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/music"
-                className="rounded-full px-6 py-4"
-              >
-                Music
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/music"
-                className="rounded-full px-6 py-4"
-              >
-                Producer Battles
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/music"
-                className="rounded-full px-6 py-4"
-              >
-                About Me
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink
-                href="/music"
-                className="rounded-full px-6 py-4"
-              >
-                Contact
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+        {/* Desktop nav */}
+        <NavigationMenu className="hidden md:flex w-auto">
+          <NavigationMenuList className="gap-4 text-base font-medium tracking-tight text-secondary lg:gap-10">
+            {navLinks.map(({ href, label }) => (
+              <NavigationMenuItem key={href}>
+                <NavigationMenuLink
+                  href={href}
+                  className="rounded-full px-4 py-3 lg:px-6 lg:py-4"
+                >
+                  {label}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
           </NavigationMenuList>
         </NavigationMenu>
+
+        {/* Mobile hamburger */}
+        <button
+          className="flex md:hidden items-center justify-center text-secondary"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? "Close menu" : "Open menu"}
+        >
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </nav>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="md:hidden mt-6 flex flex-col gap-1 border-t border-border pt-6">
+          {navLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-4 py-3 text-base font-medium text-secondary transition-colors hover:bg-muted hover:text-primary"
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   );
 }
