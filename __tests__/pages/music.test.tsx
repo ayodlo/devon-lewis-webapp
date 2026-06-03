@@ -17,10 +17,8 @@ describe("Music page", () => {
 
   it("renders the bio paragraphs", () => {
     render(<MusicPage />);
-    expect(screen.getByText(/hip-hop and trap/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/raw concept to a polished production/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/baseball season/i)).toBeInTheDocument();
+    expect(screen.getByText(/benny cassette/i)).toBeInTheDocument();
   });
 
   it("renders all genre tags", () => {
@@ -40,17 +38,19 @@ describe("Music page", () => {
 
   it("renders all four credit card titles", () => {
     render(<MusicPage />);
-    // Use heading role to target the h3 specifically, not the category badge
+    // Use getByRole("heading") to scope to h3 elements only,
+    // avoiding false matches in the description paragraphs
     expect(
-      screen.getByRole("heading", { name: "Achievement One" })
+      screen.getByRole("heading", { name: /hannibal interlude/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Production Credit" })
+      screen.getByRole("heading", { name: /london town/i })
     ).toBeInTheDocument();
-    // "Milestone" appears as both h3 and category span — check we have at least one
-    expect(screen.getAllByText("Milestone").length).toBeGreaterThanOrEqual(1);
     expect(
-      screen.getByRole("heading", { name: "Producer Battle" })
+      screen.getByRole("heading", { name: /competitive platform/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /sharing music with artists/i })
     ).toBeInTheDocument();
   });
 
@@ -63,9 +63,9 @@ describe("Music page", () => {
 
   it("renders credit years", () => {
     render(<MusicPage />);
-    expect(screen.getByText("2024")).toBeInTheDocument();
-    const years2023 = screen.getAllByText("2023");
-    expect(years2023.length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("2015")).toBeInTheDocument();
+    expect(screen.getByText("2019")).toBeInTheDocument();
+    expect(screen.getByText("2023")).toBeInTheDocument();
     expect(screen.getByText("2022")).toBeInTheDocument();
   });
 
@@ -89,8 +89,8 @@ describe("Music page", () => {
     expect(iframe.getAttribute("src")).toContain("open.spotify.com");
   });
 
-  it("renders the Streaming eyebrow label", () => {
+  it("renders the Sounds eyebrow label for the genres section", () => {
     render(<MusicPage />);
-    expect(screen.getByText("Streaming")).toBeInTheDocument();
+    expect(screen.getByText("Sounds")).toBeInTheDocument();
   });
 });

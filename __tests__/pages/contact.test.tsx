@@ -17,7 +17,7 @@ describe("Contact page", () => {
   it("renders the intro paragraph", () => {
     render(<ContactPage />);
     expect(
-      screen.getByText(/don't be a stranger/i)
+      screen.getByText(/collaborate on some jams/i)
     ).toBeInTheDocument();
   });
 
